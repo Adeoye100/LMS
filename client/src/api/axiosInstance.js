@@ -1,26 +1,20 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000",
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const tokenString = sessionStorage.getItem("accessToken");
-    let accessToken = "";
-    
-    if (tokenString && tokenString !== "undefined" && tokenString !== "null") {
-      try {
-        accessToken = JSON.parse(tokenString) || "";
-      } catch (error) {
-        accessToken = tokenString; // If JSON.parse fails, use the raw string
-      }
-    }
-
+    const accessToken = JSON.parse(
+      sessionStorage.getItem("accessToken") || "null"
+    );
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
-
     return config;
   },
   (err) => Promise.reject(err)
