@@ -53,14 +53,11 @@ function StudentViewCoursesPage() {
     const indexOfCurrentSection =
       Object.keys(cpyFilters).indexOf(getSectionId);
 
-    console.log(indexOfCurrentSection, getSectionId);
     if (indexOfCurrentSection === -1) {
       cpyFilters = {
         ...cpyFilters,
         [getSectionId]: [getCurrentOption.id],
       };
-
-      console.log(cpyFilters);
     } else {
       const indexOfCurrentOption = cpyFilters[getSectionId].indexOf(
         getCurrentOption.id
@@ -124,8 +121,6 @@ function StudentViewCoursesPage() {
       sessionStorage.removeItem("filters");
     };
   }, []);
-
-  console.log(loadingState, "loadingState");
 
   return (
     <div className="container mx-auto p-4">

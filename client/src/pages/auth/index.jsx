@@ -12,6 +12,7 @@ import { AuthContext } from "@/context/auth-context";
 import { GraduationCap } from "lucide-react";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast, Toaster } from "react-hot-toast";
 
 function AuthPage() {
   const [activeTab, setActiveTab] = useState("signin");
@@ -45,7 +46,24 @@ function AuthPage() {
     );
   }
 
-  console.log(signInFormData);
+  async function handleLogin(event) {
+    try {
+      await handleLoginUser(event);
+      toast.success("Login successful!");
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Login failed");
+    }
+  }
+
+  async function handleRegister(event) {
+    try {
+      await handleRegisterUser(event);
+      toast.success("Registration successful! Please login.");
+      setActiveTab("signin");
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Registration failed");
+    }
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -55,6 +73,7 @@ function AuthPage() {
           <span className="font-extrabold text-xl">LMS LEARN</span>
         </Link>
       </header>
+      <Toaster position="top-center" />
       <div className="flex items-center justify-center min-h-screen bg-background">
         <Tabs
           value={activeTab}
@@ -81,7 +100,7 @@ function AuthPage() {
                   formData={signInFormData}
                   setFormData={setSignInFormData}
                   isButtonDisabled={!checkIfSignInFormIsValid()}
-                  handleSubmit={handleLoginUser}
+                  handleSubmit={handleLogin}
                 />
               </CardContent>
             </Card>
@@ -101,7 +120,7 @@ function AuthPage() {
                   formData={signUpFormData}
                   setFormData={setSignUpFormData}
                   isButtonDisabled={!checkIfSignUpFormIsValid()}
-                  handleSubmit={handleRegisterUser}
+                  handleSubmit={handleRegister}
                 />
               </CardContent>
             </Card>

@@ -42,20 +42,6 @@ function StudentViewCourseDetailsPage() {
   const location = useLocation();
 
   async function fetchStudentViewCourseDetails() {
-    // const checkCoursePurchaseInfoResponse =
-    //   await checkCoursePurchaseInfoService(
-    //     currentCourseDetailsId,
-    //     auth?.user._id
-    //   );
-
-    // if (
-    //   checkCoursePurchaseInfoResponse?.success &&
-    //   checkCoursePurchaseInfoResponse?.data
-    // ) {
-    //   navigate(`/course-progress/${currentCourseDetailsId}`);
-    //   return;
-    // }
-
     const response = await fetchStudentViewCourseDetailsService(
       currentCourseDetailsId
     );
@@ -70,7 +56,6 @@ function StudentViewCourseDetailsPage() {
   }
 
   function handleSetFreePreview(getCurrentVideoInfo) {
-    console.log(getCurrentVideoInfo);
     setDisplayCurrentVideoFreePreview(getCurrentVideoInfo?.videoUrl);
   }
 
@@ -93,7 +78,6 @@ function StudentViewCourseDetailsPage() {
       coursePricing: studentViewCourseDetails?.pricing,
     };
 
-    console.log(paymentPayload, "paymentPayload");
     const response = await createPaymentService(paymentPayload);
 
     if (response.success) {

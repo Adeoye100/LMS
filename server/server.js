@@ -57,11 +57,27 @@ const startServer = async () => {
   try {
     await mongoose.connect(MONGO_URI);
     console.log("MongoDB is connected");
+
+    // Monitor connection errors after initial connection
+    mongoose.connection.on("error", (err) => {
+      console.error("MongoDB connection error:", err);
+    });
+
+    mongoose.connection.on("disconnected", () => {
+      console.log("MongoDB disconnected");
+    });
+
     app.listen(PORT, () =>
       console.log(`Server is now running on port ${PORT}`)
     );
+
+    // Graceful shutdown to close MongoDB connection
+    process.on("SIGINT", async () => {
+      await mongoose.connection.close();
+      process.exit(0);
+    });
   } catch (err) {
-    console.error("Database connection error:", err);
+    console.error("Database connection error:", err.message);
     process.exit(1);
   }
 };
